@@ -98,9 +98,10 @@ msg_info "Installing Docker $DOCKER_LATEST_VERSION"
 DOCKER_CONFIG_PATH='/etc/docker/daemon.json'
 mkdir -p $(dirname $DOCKER_CONFIG_PATH)
 if [ "$ST" == "yes" ]; then
-wget -qL -O fuse-overlayfs https://github.com/containers/fuse-overlayfs/releases/download/v1.10.0/fuse-overlayfs-x86_64
-cp fuse-overlayfs /usr/local/bin
+cd /usr/local/bin
+curl -sSL -o fuse-overlayfs https://github.com/containers/fuse-overlayfs/releases/download/v1.10.0/fuse-overlayfs-x86_64
 chmod 755 /usr/local/bin/fuse-overlayfs
+cd ~
 fi
 cat >$DOCKER_CONFIG_PATH <<'EOF'
 {
