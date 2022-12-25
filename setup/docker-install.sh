@@ -98,7 +98,7 @@ msg_info "Installing Docker $DOCKER_LATEST_VERSION"
 DOCKER_CONFIG_PATH='/etc/docker/daemon.json'
 mkdir -p $(dirname $DOCKER_CONFIG_PATH)
 if [ "$ST" == "yes" ]; then
-apt-get install -y fuse-overlayfs 
+apt-get install -y fuse-overlayfs &>/dev/null
 cat >$DOCKER_CONFIG_PATH <<'EOF'
 {
   "log-driver": "journald"
