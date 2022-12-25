@@ -99,20 +99,12 @@ DOCKER_CONFIG_PATH='/etc/docker/daemon.json'
 mkdir -p $(dirname $DOCKER_CONFIG_PATH)
 if [ "$ST" == "yes" ]; then
 apt-get install -y fuse-overlayfs &>/dev/null
-cat >$DOCKER_CONFIG_PATH <<'EOF'
-{
-  "log-driver": "journald"
-  "storage-driver": "fuse-overlayfs"
-}
-EOF
-else
-cat >$DOCKER_CONFIG_PATH <<'EOF'
-{
-  "log-driver": "journald"
-  "storage-driver": "overlay2"
-}
-EOF
 fi
+cat >$DOCKER_CONFIG_PATH <<'EOF'
+{
+  "log-driver": "journald"
+}
+EOF
 sh <(curl -sSL https://get.docker.com) &>/dev/null
 msg_ok "Installed Docker $DOCKER_LATEST_VERSION"
 
