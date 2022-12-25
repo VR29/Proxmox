@@ -280,13 +280,11 @@ function start_script() {
 clear
 start_script
 if [ "$VERB" == "yes" ]; then set -x; fi
-if [ "$CT_TYPE" == "1" ]; then
-  FEATURES="nesting=1,keyctl=1"
-else
-  FEATURES="nesting=1"
-fi
+if [ "$STORAGE_TYPE" == "zfspool" ]; then FEATURES="fuse=1,keyctl=1,nesting=1"; fi
+if [ "$STORAGE_TYPE" != "zfspool" ]; then FEATURES="keyctl=1,nesting=1"; fi
 TEMP_DIR=$(mktemp -d)
 pushd $TEMP_DIR >/dev/null
+export ST=$STORAGE_TYPE
 export VERBOSE=$VERB
 export SSH_ROOT=${SSH}
 export CTID=$CT_ID
@@ -314,7 +312,7 @@ EOF
 msg_info "Starting LXC Container"
 pct start $CTID
 msg_ok "Started LXC Container"
-lxc-attach -n $CTID -- bash -c "$(wget -qLO - https://raw.githubusercontent.com/tteck/Proxmox/main/setup/$var_install.sh)" || exit
+lxc-attach -n $CTID -- bash -c "$(wget -qLO - https://raw.githubusercontent.com/tteck/Proxmox/dev/setup/$var_install.sh)" || exit
 IP=$(pct exec $CTID ip a s dev eth0 | sed -n '/inet / s/\// /p' | awk '{print $2}')
 pct set $CTID -description "# ${APP} LXC
 ### https://tteck.github.io/Proxmox/
