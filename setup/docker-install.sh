@@ -95,17 +95,18 @@ PORTAINER_LATEST_VERSION=$(get_latest_release "portainer/portainer")
 DOCKER_COMPOSE_LATEST_VERSION=$(get_latest_release "docker/compose")
 
 msg_info "Installing Docker $DOCKER_LATEST_VERSION"
-mkdir -p /etc/docker/daemon.json
-if [ "$ST" == "zfspool" ]; then
+DOCKER_CONFIG_PATH='/etc/docker/daemon.json'
+mkdir -p $(dirname $DOCKER_CONFIG_PATH)
+if [ "$ST" == "yes" ]; then
 apt-get install -y fuse-overlayfs 
-cat <<EOF >/etc/docker/daemon.json
+cat >$DOCKER_CONFIG_PATH <<'EOF'
 {
   "log-driver": "journald"
   "storage-driver": "fuse-overlayfs"
 }
 EOF
 else
-cat <<EOF >/etc/docker/daemon.json
+cat >$DOCKER_CONFIG_PATH <<'EOF'
 {
   "log-driver": "journald"
 }
