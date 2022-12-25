@@ -109,6 +109,7 @@ else
 cat >$DOCKER_CONFIG_PATH <<'EOF'
 {
   "log-driver": "journald"
+  "storage-driver": "overlay2"
 }
 EOF
 fi
